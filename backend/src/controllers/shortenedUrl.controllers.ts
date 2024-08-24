@@ -1,4 +1,4 @@
-import { saveShortenedUrl, urlExists } from "../models/shortenedUrl.models";
+import { getLongUrlByKey, saveShortenedUrl, urlExists } from "../models/shortenedUrl.models";
 
 
 export const createShortenedUrlMethod = async (longUrl : string) => {
@@ -18,5 +18,10 @@ export const createShortenedUrlMethod = async (longUrl : string) => {
         console.log(error);
         return;
     }
+};
+
+export const getLongUrl = async (key : string) => {
+    const result = await getLongUrlByKey(key);
+    return result?.longUrl;
 };
 
