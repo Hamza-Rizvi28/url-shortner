@@ -1,0 +1,26 @@
+version: '3.9'
+
+services:
+
+  server:
+    build: ./
+    command: ["npm", "run", "dev"]
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    env_file:
+      - .env
+
+  postgres:
+    image: postgres:14-alpine
+    environment:
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_DB=${DB_NAME}
+    env_file:
+      - .env
+    ports:
+      - "5432:5432"
+    # volumes:
+    #   - ./backend/db/db.sql:/docker-entrypoint-initdb.d/db.sql
