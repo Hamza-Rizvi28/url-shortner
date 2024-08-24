@@ -1,7 +1,7 @@
 import express, { Request, Response, Express } from "express";
 
 const app : Express = express();
-const port : Number = 3000;
+const port : Number = 8080;
 
 app.get("/", (req : Request, res : Response) => {
     res.json({"result": "Main get route"});
