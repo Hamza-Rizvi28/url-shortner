@@ -1,9 +1,10 @@
 import { getLongUrlByKey, saveShortenedUrl, urlExists } from "../models/shortenedUrl.models";
+import { calculateHashedUrl } from "../utils";
 
 
 export const createShortenedUrlMethod = async (longUrl : string) => {
 
-    const hashedUrlKey = "xhrze"
+    const hashedUrlKey = calculateHashedUrl(longUrl);
 
     const checkUrlExists = await urlExists(longUrl);
     if (checkUrlExists) {
