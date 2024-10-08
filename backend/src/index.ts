@@ -2,9 +2,10 @@ import express, { Request, Response, Express, json } from "express";
 import { createShortenedUrlMethod, getLongUrl } from "./controllers/shortenedUrl.controllers";
 import { UrlRequestSchema } from "./schemas";
 import { validateRequestBody } from "./middlewares/validationMiddleware";
+import { environment } from "./config";
 
 const app : Express = express();
-const port : number = parseInt(process.env.PORT as string) || 8080;
+const port : number = environment.PORT || 8080;
 
 app.use(express.json());
 
