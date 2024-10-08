@@ -1,8 +1,10 @@
 import express, { Request, Response, Express, json } from "express";
 import { createShortenedUrlMethod, getLongUrl } from "./controllers/shortenedUrl.controllers";
+import { UrlRequestSchema } from "./schemas";
+import { validateRequestBody } from "./middlewares/validationMiddleware";
 
 const app : Express = express();
-const port : Number = 8080;
+const port : number = parseInt(process.env.PORT as string) || 8080;
 
 app.use(express.json());
 
@@ -11,11 +13,12 @@ app.get("/", (req : Request, res : Response) => {
     res.statusCode = 200;
 });
 
-app.post("/url/create", async (req : Request, res : Response) => {
+app.post("/url/create", validateRequestBody(UrlRequestSchema),  async (req : Request, res : Response) => {
     
     const longUrl = req.body.longUrl;
     const result = await createShortenedUrlMethod(longUrl);
-    res.json({"result": result});
+    const {message, ...filteredResult} = result;
+    res.status(200).json({ message: message, data: filteredResult });
 })
 
 app.get("/url/*", async (req : Request, res : Response) => {
