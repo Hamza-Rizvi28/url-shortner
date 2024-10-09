@@ -5,13 +5,12 @@ import { validateRequestBody } from "./middlewares/validationMiddleware";
 import { environment } from "./config";
 
 const app : Express = express();
-const port : number = environment.PORT || 8080;
+const port : number = environment.PORT;
 
 app.use(express.json());
 
 app.get("/", (req : Request, res : Response) => {
-    res.json({"result": "Main get route"});
-    res.statusCode = 200;
+    res.status(200).json({"result": "Main get route"});
 });
 
 app.post("/url/create", validateRequestBody(UrlRequestSchema),  async (req : Request, res : Response) => {
