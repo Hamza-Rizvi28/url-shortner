@@ -1,4 +1,6 @@
-export const PROD_BASE_URL : string = "";
+import { environment } from "./config";
+
+export const PROD_BASE_URL : string = environment.PROD_BASE_URL;
 export const DEV_BASE_URL : string = "localhost";
 
 export const HTTP_STATUS = {

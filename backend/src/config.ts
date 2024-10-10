@@ -9,6 +9,7 @@ interface EnvVariables {
     DB_PASSWORD: string;
     NODE_ENV: string;
     DATABASE_URL: string;
+    PROD_BASE_URL : string;
 };
 
 const getEnvVariables = (): EnvVariables => {
@@ -19,6 +20,7 @@ const getEnvVariables = (): EnvVariables => {
         DB_PASSWORD: process.env.DB_PASSWORD as string,
         NODE_ENV: process.env.NODE_ENV as string || "development",
         DATABASE_URL: process.env.DATABASE_URL as string,
+        PROD_BASE_URL: process.env.PROD_BASE_URL as string,
     };
 };
   
