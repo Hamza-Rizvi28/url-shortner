@@ -1,10 +1,11 @@
+import { baseUrl } from "../utils";
 import prisma from "./prisma";
 
 export const saveShortenedUrl = async (longUrl : string, hashedUrlKey : string) => {
     return await prisma.shortenedUrl.create({
         data: {
           longUrl: longUrl,
-          shortUrl: `http://localhost/url/${hashedUrlKey}`,
+          shortUrl: `http://${baseUrl}/url/${hashedUrlKey}`,
           key: hashedUrlKey,
         },
       });
