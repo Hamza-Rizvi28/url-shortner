@@ -10,6 +10,12 @@ export const shortenUrl = async (url : string) => {
     );
 };
 
-export const getLongUrl = async () => {
-    return await axios.get('/url/*');
+export const getLongUrl = async (key : string) => {
+    try {
+        return await axios.get(`/url/${key}`);
+    }
+    catch (error) {
+        console.log(error)
+    }
+    
 };
