@@ -3,7 +3,8 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import { shortenUrl } from '../api/url';
+import { getLongUrl, shortenUrl } from '../api/url';
+import ShortenedUrlResult from './ShortenedUrlResult';
 
 export default function UrlShortener() {
   const [longUrl, setLongUrl] = useState('');
@@ -59,12 +60,11 @@ export default function UrlShortener() {
         </Button>
       </Box>
       {shortUrl && (
-        <Typography
-          variant="body1"
-          sx={{ mt: 2, color: 'green', wordWrap: 'break-word' }}
-        >
-          Shortened URL: <a href={shortUrl}>{shortUrl}</a>
-        </Typography>
+
+        <ShortenedUrlResult
+          longUrl={longUrl}
+          shortUrl={shortUrl}
+        />
       )}
     </Box>
   );
