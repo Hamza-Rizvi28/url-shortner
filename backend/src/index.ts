@@ -3,12 +3,16 @@ import { createShortenedUrlMethod, getLongUrl } from "./controllers/shortenedUrl
 import { UrlRequestSchema } from "./schemas";
 import { validateRequestBody } from "./middlewares/validationMiddleware";
 import { environment } from "./config";
-import { HTTP_STATUS } from "./constants";
+import { CORS_ORIGIN, HTTP_STATUS } from "./constants";
 
 const app : Express = express();
 const port : number = environment.PORT;
+const cors = require('cors');
 
 app.use(express.json());
+app.use(cors({
+    origin: CORS_ORIGIN
+}));
 
 app.get("/", (req : Request, res : Response) => {
     res.status(HTTP_STATUS.OK).json({"result": "Main get route"});
