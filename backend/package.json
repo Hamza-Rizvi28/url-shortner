@@ -10,16 +10,21 @@
     "preserve": "npm run build",
     "serve": "concurrently \"npx tsc -w\"  \"nodemon dist/index.js\"",
     "dev": "nodemon src/index.ts",
-    "migrate": "npx prisma migrate dev"
+    "migrate": "npx prisma migrate dev",
+    "test:unit": "jest --config jest.unit.config.js --reporters=default --reporters=jest-junit --coverage --coverageReporters=cobertura --coverageReporters=text"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@types/express": "^4.17.21",
+    "@types/jest": "^29.5.14",
     "@types/node": "^20.12.13",
+    "jest": "^29.7.0",
+    "jest-junit": "^16.0.0",
     "nodemon": "^3.1.2",
     "prisma": "^5.18.0",
+    "ts-jest": "^29.2.5",
     "ts-node": "^10.9.2",
     "typescript": "^5.4.5"
   },
