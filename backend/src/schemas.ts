@@ -1,3 +1,5 @@
+import { UrlRequestBody } from "./types/requestBodyTypes";
+
 const urlRegex = new RegExp(
   '^(https?:\\/\\/)?' +
   '(([a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,})|' + // Domain name
@@ -6,10 +8,6 @@ const urlRegex = new RegExp(
   '(\\?[;&a-zA-Z0-9%_.~+=-]*)?' +         // Optional query string
   '(\\#[-a-zA-Z0-9_]*)?$'                // Optional fragment
 );
-
-export interface UrlRequestBody {
-  longUrl: string
-};
 
 export const isValidUrlRequestBody = (urlBody: unknown): urlBody is UrlRequestBody => {
 
