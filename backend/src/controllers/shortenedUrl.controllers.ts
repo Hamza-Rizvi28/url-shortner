@@ -1,9 +1,18 @@
 import { getLongUrlByKey, saveShortenedUrl, urlExists } from "../models/shortenedUrl.models";
+import { isValidUrlRequestBody } from "../schemas";
 import { calculateHashedUrl } from "../utils";
+import { Request } from 'express';
+import { CustomError } from "../error";
+import { HTTP_STATUS } from "../constants";
 
 
-export const createShortenedUrlMethod = async (longUrl : string) => {
+export const createShortenedUrlMethod = async (request : Pick<Request, 'body'>) => {
 
+    if (!(isValidUrlRequestBody(request.body))) {
+        throw new CustomError(HTTP_STATUS.BAD_REQUEST, 'URL request body is not valid');
+    }
+
+    const longUrl = request.body.longUrl;
     const hashedUrlKey = calculateHashedUrl(longUrl);
 
     const checkUrlExists = await urlExists(longUrl);

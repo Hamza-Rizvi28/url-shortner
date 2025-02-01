@@ -1,7 +1,5 @@
 import express, { Request, Response, Express, json } from "express";
 import { createShortenedUrlMethod, getLongUrl } from "./controllers/shortenedUrl.controllers";
-import { UrlRequestSchema } from "./schemas";
-import { validateRequestBody } from "./middlewares/validationMiddleware";
 import { environment } from "./config";
 import { CORS_ORIGIN, HTTP_STATUS } from "./constants";
 
@@ -18,10 +16,9 @@ app.get("/", (request : Request, response : Response) => {
     response.status(HTTP_STATUS.OK).json({"result": "Main get route"});
 });
 
-app.post("/url/create", validateRequestBody(UrlRequestSchema),  async (request : Request, response : Response) => {
+app.post("/url/create", async (request : Request, response : Response) => {
     try {
-        const longUrl = request.body.longUrl;
-        const result = await createShortenedUrlMethod(longUrl);
+        const result = await createShortenedUrlMethod(request);
         const {message, ...filteredResult} = result;
         response.status(HTTP_STATUS.OK).json({ message: message, data: filteredResult });    
     } catch (error) {
