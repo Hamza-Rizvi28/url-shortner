@@ -4,8 +4,8 @@ import Typography from '@mui/material/Typography';
 import CopyToClipboardComponent from './CopyToClipboard';
 
 interface ShortenerUrlResultProps {
-    longUrl: string;
-    shortUrl: string;
+    longUrl: string | undefined;
+    shortUrl: string | undefined;
 }
 
 const ShortenerUrlResult: React.FC<ShortenerUrlResultProps> = ({ longUrl, shortUrl }) => {
