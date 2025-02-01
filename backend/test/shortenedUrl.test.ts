@@ -1,3 +1,4 @@
+import { Request } from "express";
 import { createShortenedUrlMethod, getLongUrl } from "../src/controllers/shortenedUrl.controllers";
 import { getLongUrlByKey, saveShortenedUrl, urlExists } from "../src/models/shortenedUrl.models";
 import { calculateHashedUrl } from "../src/utils";
@@ -15,6 +16,13 @@ jest.mock('../src/models/shortenedUrl.models', () => ({
 describe('url shortener service', () => {
     
     const longUrl = 'https://www.amazon.com/Rust-Programming-Language-2nd/dp/1718503105/ref=sr_1_1?crid=3977W67XGQPJR&keywords=the+rust+programming+language&qid=1685542718&sprefix=the+%2Caps%2C3079&sr=8-1'
+    
+    const mockedRequest: Pick<Request, 'body'> = {
+        body: {
+            longUrl : longUrl, 
+        },
+    };
+
     const mockedResponse = {
         "data": {
             "longUrl": "https://www.amazon.com/Rust-Programming-Language-2nd/dp/1718503105/ref=sr_1_1?crid=3977W67XGQPJR&keywords=the+rust+programming+language&qid=1685542718&sprefix=the+%2Caps%2C3079&sr=8-1",
@@ -35,7 +43,7 @@ describe('url shortener service', () => {
         (urlExists as jest.Mock).mockResolvedValue(mockedResponse);
         (calculateHashedUrl as jest.Mock).mockReturnValue(hashedUrlKey);
 
-        const result = await createShortenedUrlMethod(longUrl);
+        const result = await createShortenedUrlMethod(mockedRequest);
 
         expect(calculateHashedUrl).toHaveBeenCalledWith(longUrl);
         expect(urlExists).toHaveBeenCalledWith(longUrl);
@@ -49,7 +57,7 @@ describe('url shortener service', () => {
         
         (saveShortenedUrl as jest.Mock).mockResolvedValue(mockedResponse);
 
-        const result = await createShortenedUrlMethod(longUrl);
+        const result = await createShortenedUrlMethod(mockedRequest);
 
         expect(calculateHashedUrl).toHaveBeenCalledWith(longUrl);
         expect(urlExists).toHaveBeenCalledWith(longUrl);
@@ -63,7 +71,7 @@ describe('url shortener service', () => {
         (calculateHashedUrl as jest.Mock).mockReturnValue(hashedUrlKey);
         (saveShortenedUrl as jest.Mock).mockRejectedValue(new Error('Database error'));
 
-        const result = await createShortenedUrlMethod(longUrl);
+        const result = await createShortenedUrlMethod(mockedRequest);
 
         expect(urlExists).toHaveBeenCalledWith(longUrl);
         expect(saveShortenedUrl).toHaveBeenCalledWith(longUrl, hashedUrlKey);
