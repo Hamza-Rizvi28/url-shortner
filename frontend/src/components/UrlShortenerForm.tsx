@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
@@ -6,16 +6,33 @@ import Typography from '@mui/material/Typography';
 import { getLongUrl, shortenUrl } from '../api/url';
 import ShortenedUrlResult from './ShortenedUrlResult';
 
-export default function UrlShortener() {
+interface UrlShortenerProps {
+  onSubmit: (longUrl: string, shortUrl: string) => void;
+}
+
+const UrlShortenerForm : React.FC<UrlShortenerProps> = ({onSubmit}) => {
   const [longUrl, setLongUrl] = useState('');
   const [shortUrl, setShortUrl] = useState('');
+
+  useEffect(()=> {
+    
+    if (shortUrl.length !== 0 ) {
+      onSubmit(longUrl, shortUrl);
+    }
+
+  }, [shortUrl]);
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     if (longUrl) {
-      const getShortUrlResult = await shortenUrl(longUrl);
-      setShortUrl(getShortUrlResult.data.data.shortUrl);
-      console.log(getShortUrlResult);
+      try {
+        const getShortUrlResult = await shortenUrl(longUrl);
+        setShortUrl(getShortUrlResult.data.data.shortUrl);
+        console.log(getShortUrlResult);
+      }
+      catch (error) {
+        console.log(error);
+      }
     }
   };
 
@@ -69,3 +86,5 @@ export default function UrlShortener() {
     </Box>
   );
 }
+
+export default UrlShortenerForm;

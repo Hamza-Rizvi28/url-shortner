@@ -1,15 +1,31 @@
 import NavBar from "./components/NavBar"
-import UrlShortener from "./components/URLForm";
+import UrlShortenerForm from "./components/UrlShortenerForm";
+import React, { useState } from "react";
+import ShortenedUrlResult from "./components/ShortenedUrlResult";
 
-function App() {
+const App: React.FC = () => {
+
+    const [showResult, setShowResult] = useState(false);
+    const [shortenedData, setShortenedData] = useState<{ longUrl: string; shortUrl: string } | undefined>(undefined);
+
+    const handleUrlShorten = (longUrl: string, shortUrl: string) => {
+        setShortenedData({ longUrl, shortUrl });
+        setShowResult(true);
+    };
 
  return (
     <>
         <NavBar/>
-        <UrlShortener/>
+
+        {!showResult ? (
+                <UrlShortenerForm onSubmit={handleUrlShorten} />
+            ) : (
+                <ShortenedUrlResult longUrl={shortenedData?.longUrl} shortUrl={shortenedData?.shortUrl} />
+            )
+        }
     </>
     
  );
 }
 
-export default App
+export default App;
