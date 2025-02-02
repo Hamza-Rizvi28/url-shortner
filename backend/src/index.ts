@@ -1,46 +1,47 @@
 import express, { Request, Response, Express, json } from "express";
 import { createShortenedUrlMethod, getLongUrl } from "./controllers/shortenedUrl.controllers";
-import { UrlRequestSchema } from "./schemas";
-import { validateRequestBody } from "./middlewares/validationMiddleware";
 import { environment } from "./config";
-import { HTTP_STATUS } from "./constants";
+import { CORS_ORIGIN, HTTP_STATUS } from "./constants";
 
 const app : Express = express();
 const port : number = environment.PORT;
+const cors = require('cors');
 
 app.use(express.json());
+app.use(cors({
+    origin: CORS_ORIGIN
+}));
 
-app.get("/", (req : Request, res : Response) => {
-    res.status(HTTP_STATUS.OK).json({"result": "Main get route"});
+app.get("/", (request : Request, response : Response) => {
+    response.status(HTTP_STATUS.OK).json({"result": "Main get route"});
 });
 
-app.post("/url/create", validateRequestBody(UrlRequestSchema),  async (req : Request, res : Response) => {
+app.post("/url/create", async (request : Request, response : Response) => {
     try {
-        const longUrl = req.body.longUrl;
-        const result = await createShortenedUrlMethod(longUrl);
+        const result = await createShortenedUrlMethod(request);
         const {message, ...filteredResult} = result;
-        res.status(HTTP_STATUS.OK).json({ message: message, data: filteredResult });    
+        response.status(HTTP_STATUS.OK).json({ message: message, data: filteredResult });    
     } catch (error) {
         console.log(error);
-        res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({ message: 'Internal Server Error', error: error });
+        response.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({ message: 'Internal Server Error', error: error });
 
     }
     
 })
 
-app.get("/url/*", async (req : Request, res : Response) => {
+app.get("/url/*", async (request : Request, response : Response) => {
 
-    const originalUrl = req.url;
+    const originalUrl = request.url;
     const key = originalUrl.substring(5);
     try {
         const longUrl = await getLongUrl(key);
         if (longUrl) {
-            return res.redirect(longUrl);
+            return response.redirect(longUrl);
         }
-        return res.status(HTTP_STATUS.NOT_FOUND).json({"result": "Not found"});
+        return response.status(HTTP_STATUS.NOT_FOUND).json({"result": "Not found"});
     } catch (error) {
         console.log(error);
-        res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({ message: 'Internal Server Error', error: error });
+        response.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({ message: 'Internal Server Error', error: error });
     }
 
 });

@@ -5,7 +5,7 @@ export const saveShortenedUrl = async (longUrl : string, hashedUrlKey : string) 
     return await prisma.shortenedUrl.create({
         data: {
           longUrl: longUrl,
-          shortUrl: `http://${baseUrl}/url/${hashedUrlKey}`,
+          shortUrl: `${baseUrl}/url/${hashedUrlKey}`,
           key: hashedUrlKey,
         },
       });
