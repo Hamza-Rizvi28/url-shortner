@@ -10,7 +10,8 @@
     "preserve": "npm run build",
     "serve": "concurrently \"npx tsc -w\"  \"nodemon dist/index.js\"",
     "dev": "nodemon src/index.ts",
-    "migrate": "npx prisma migrate dev",
+    "migration:dev": "npx prisma migrate dev",
+    "migration:deploy": "npx prisma migrate deploy",
     "lint": "eslint ./src/*.ts ./test/*.ts",
     "test:unit": "jest --config jest.unit.config.js --reporters=default --reporters=jest-junit --coverage --coverageReporters=cobertura --coverageReporters=text"
   },
