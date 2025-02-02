@@ -18,15 +18,15 @@ This application allows users to shorten long URLs into concise, easy-to-share l
 - Express.js
 - TypeScript
 - PostgreSQL
+- Docker
+- Prisma ORM
 
 ## Prerequisites
 
 Make sure you have the following installed:
 
-- Node.js (v20.x or higher)
-- PostgreSQL
-- npm or yarn
-- Git
+- Docker
+- Docker compose
 
 ## Installation
 
@@ -34,37 +34,40 @@ Make sure you have the following installed:
 
     ```bash
     git clone https://github.com/your-username/url-shortener.git
-    cd url-shortener/backend
     ```
 
-2. Install dependencies:
+2. Set up environment variables in the backend folder:
+
+   Create a `.env` file in the backend folder of the project and add the following and make changes as per your environment:
 
     ```bash
-    npm install
-    ```
-
-3. Set up environment variables:
-
-   Create a `.env` file in the root of the project and add the following and make changes as per your environment:
-
-    ```bash
-    DATABASE_URL="postgresql://johndoe:randompassword@localhost:5432/mydb?schema=public"
+    DATABASE_URL='postgresql://USER:PASSWORD@HOST:PORT/DATABASE?schema=SCHEMA'
     PORT=8080
     ```
 
-4. Run database migrations:
-
+4. To start all services:
     ```bash
-    npx prisma migrate dev
-    ```
-
-5. Start the server:
-
-    ```bash
-    npm run dev
+    docker compose up --build
     ```
 
     The app will run at `http://localhost:8080` by default.
+
+5. To setup database:
+    
+    1. Running Migrations:
+        
+        To ensure that the database schema is up to date, you need to run migrations. If you're setting up the project for the first time or have made schema changes, run:
+
+        ```bash
+        docker-compose exec server npx prisma migrate deploy
+        ```
+
+    2. Generate Prisma Client: 
+    
+        After running migrations, generate the Prisma client to interact with the database:
+        ```bash
+        docker-compose exec server npx prisma generate
+        ```
 
 ## Usage
 
@@ -72,3 +75,4 @@ To shorten a URL, send a `POST` request to the `/url/create` endpoint with a JSO
 
 ```bash
 curl -X POST http://localhost:8080/url/create -H "Content-Type: application/json" -d '{"longUrl": "https://www.example.com"}'
+```
