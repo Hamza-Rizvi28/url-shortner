@@ -27,6 +27,25 @@ const getEnvVariables = (): EnvVariables => {
         JWT_REFRESH_SECRET: process.env.JWT_REFRESH_SECRET as string,
     };
 };
-  
+
+const requiredEnvVars: string[] = [
+    "PORT",
+    "NODE_ENV",
+    "DATABASE_URL",
+    // "PROD_BASE_URL", //required if environment production
+    "JWT_ACCESS_SECRET",
+    "JWT_REFRESH_SECRET",
+];
+
+const missingEnvVars = requiredEnvVars.filter((key) => {
+    const value = process.env[key];
+    return value === undefined || value.trim() === "";
+});
+
+if (missingEnvVars.length > 0) {
+    console.error(`Missing or empty required environment variables: ${missingEnvVars.join(", ")}`);
+    process.exit(1);
+}
+
 export const environment = getEnvVariables();
   
