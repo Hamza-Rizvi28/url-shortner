@@ -3,6 +3,7 @@ import { createShortenedUrlMethod, getLongUrl } from "./controllers/shortenedUrl
 import { environment } from "./config";
 import { CORS_ORIGIN, HTTP_STATUS } from "./constants";
 import bcrypt from "bcrypt";
+import cookieParser from "cookie-parser";
 import prisma from "./models/prisma";
 import { authenticateJwt } from "./authenticationMiddleware";
 import { generateJwtAccessToken, generateJwtRefreshToken, verifyJWT } from "./utils";
@@ -13,6 +14,7 @@ const port : number = environment.PORT;
 const cors = require('cors');
 
 app.use(express.json());
+app.use(cookieParser())
 app.use(cors({
     origin: CORS_ORIGIN
 }));
@@ -86,9 +88,10 @@ app.post('/auth/refresh', (request: Request, response: Response) => {
         const decoded = verifyJWT(refreshToken, environment.JWT_REFRESH_SECRET);
         if (decoded) {
             const newAccessToken = generateJwtAccessToken({ id: decoded.id, email: decoded.email });
-            response.send(HTTP_STATUS.OK).json({ accessToken: newAccessToken });
+            console.log(newAccessToken)
+            response.status(HTTP_STATUS.OK).json({ accessToken: newAccessToken });
         }
-        response.send(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({message: "Something went wrong!"});
+        response.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({message: "Something went wrong!"});
     } catch (error) {
         console.error(error);
         return response.status(HTTP_STATUS.FORBIDDEN).json({ message: "Invalid refresh token" });
