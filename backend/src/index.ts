@@ -5,7 +5,7 @@ import { CORS_ORIGIN, HTTP_STATUS } from "./constants";
 import bcrypt from "bcrypt";
 import prisma from "./models/prisma";
 import { authenticateJwt } from "./authenticationMiddleware";
-import { generateJwtAccessToken, generateJwtRefreshToken } from "./utils";
+import { generateJwtAccessToken, generateJwtRefreshToken, verifyJWT } from "./utils";
 import { createUser, getUserByEmail } from "./models/user.model";
 
 const app : Express = express();
@@ -72,6 +72,26 @@ app.post("/auth/login", async (request : Request, response : Response) => {
     catch (error) {
         console.error(error);
         response.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({ message: "Something went wrong!"});
+    }
+});
+
+app.post('/auth/refresh', (request: Request, response: Response) => {
+    const refreshToken = request.cookies.refreshToken;
+
+    if (!refreshToken) {
+        response.status(HTTP_STATUS.UNAUTHORIZED).json({message: "No refresh token"});
+    }
+
+    try {
+        const decoded = verifyJWT(refreshToken, environment.JWT_REFRESH_SECRET);
+        if (decoded) {
+            const newAccessToken = generateJwtAccessToken({ id: decoded.id, email: decoded.email });
+            response.send(HTTP_STATUS.OK).json({ accessToken: newAccessToken });
+        }
+        response.send(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({message: "Something went wrong!"});
+    } catch (error) {
+        console.error(error);
+        return response.status(HTTP_STATUS.FORBIDDEN).json({ message: "Invalid refresh token" });
     }
 });
 
