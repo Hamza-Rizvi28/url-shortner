@@ -10,6 +10,8 @@ interface EnvVariables {
     NODE_ENV: string;
     DATABASE_URL: string;
     PROD_BASE_URL : string;
+    JWT_ACCESS_SECRET : string;
+    JWT_REFRESH_SECRET : string;    
 };
 
 const getEnvVariables = (): EnvVariables => {
@@ -21,6 +23,8 @@ const getEnvVariables = (): EnvVariables => {
         NODE_ENV: process.env.NODE_ENV as string || "development",
         DATABASE_URL: process.env.DATABASE_URL as string,
         PROD_BASE_URL: process.env.PROD_BASE_URL as string,
+        JWT_ACCESS_SECRET: process.env.JWT_ACCESS_SECRET as string,
+        JWT_REFRESH_SECRET: process.env.JWT_REFRESH_SECRET as string,
     };
 };
   
