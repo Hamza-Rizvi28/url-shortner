@@ -1,4 +1,4 @@
-import { UrlRequestBody } from "./types/requestBodyTypes";
+import { UrlRequestBody } from './types/requestBodyTypes';
 
 const urlRegex = new RegExp(
   '^(https?:\\/\\/)?' +
@@ -17,7 +17,7 @@ export const isValidUrlRequestBody = (urlBody: unknown): urlBody is UrlRequestBo
 
   const body = urlBody as Record<string, unknown>;
 
-  return ('longUrl' in body && 
-          typeof body.longUrl === 'string' && 
+  return ('longUrl' in body &&
+          typeof body.longUrl === 'string' &&
           urlRegex.test(body.longUrl));
 };

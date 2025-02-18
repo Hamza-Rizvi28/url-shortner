@@ -1,5 +1,5 @@
-import { baseUrl } from "../utils";
-import prisma from "./prisma";
+import { baseUrl } from '../utils';
+import prisma from './prisma';
 
 export const saveShortenedUrl = async (longUrl : string, hashedUrlKey : string) => {
     return await prisma.shortenedUrl.create({
@@ -11,17 +11,17 @@ export const saveShortenedUrl = async (longUrl : string, hashedUrlKey : string) 
       });
 };
 
-export const urlExists = async (longUrl: string ) => {
+export const urlExists = async (longUrl: string) => {
    return await prisma.shortenedUrl.findFirst({
     select: {
       longUrl: true,
       shortUrl: true,
       key: true,
-      createdAt: true
+      createdAt: true,
     },
     where: {
-      longUrl: longUrl
-    }
+      longUrl: longUrl,
+    },
    });
 };
 
@@ -31,7 +31,7 @@ export const getLongUrlByKey = async (hashedUrlKey : string) => {
       longUrl: true,
     },
     where: {
-      key: hashedUrlKey
-    }
+      key: hashedUrlKey,
+    },
    });
 };

@@ -1,9 +1,9 @@
-import { getLongUrlByKey, saveShortenedUrl, urlExists } from "../models/shortenedUrl.models";
-import { isValidUrlRequestBody } from "../schemas";
-import { calculateHashedUrl } from "../utils";
+import { getLongUrlByKey, saveShortenedUrl, urlExists } from '../models/shortenedUrl.models';
+import { isValidUrlRequestBody } from '../schemas';
+import { calculateHashedUrl } from '../utils';
 import { Request } from 'express';
-import { CustomError } from "../error";
-import { HTTP_STATUS } from "../constants";
+import { CustomError } from '../error';
+import { HTTP_STATUS } from '../constants';
 
 
 export const createShortenedUrlMethod = async (request : Pick<Request, 'body'>) => {
@@ -18,15 +18,15 @@ export const createShortenedUrlMethod = async (request : Pick<Request, 'body'>) 
     const checkUrlExists = await urlExists(longUrl);
     if (checkUrlExists) {
         console.log(`Exists: ${JSON.stringify(checkUrlExists)}`);
-        return {...checkUrlExists, message: "Given url already exists!"};
+        return { ...checkUrlExists, message: 'Given url already exists!' };
     }
     try {
         const result = await saveShortenedUrl(longUrl, hashedUrlKey);
         console.log(result);
-        return {...result, message: "URL shortened successfully!"}   
+        return { ...result, message: 'URL shortened successfully!' };
     } catch (error) {
         console.log(error);
-        return {message: 'Error:' + error}
+        return { message: 'Error:' + error };
     }
 };
 
