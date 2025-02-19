@@ -3,7 +3,7 @@ export const INVALID_REQUEST_BODY : [longUrl : unknown][] = [
     ['http:facebook'],
     ['aldlasd'],
     [12241],
-    [{longUrl: 'http://hello.com'}],
-    ['']
+    [{ longUrl: 'http://hello.com' }],
+    [''],
 
 ] as const;
